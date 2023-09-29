@@ -19,7 +19,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        questionFactory.delegate = self
         questionFactory = QuestionFactory(delegate: self)
         
         imageView.layer.cornerRadius = 20
