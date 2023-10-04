@@ -9,6 +9,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestion: QuizeQuestion?
     private var questionFactory: QuestionFactoryProtocol?
     private var alertPresenterProtocol: AlertPresenterProtocol?
+    private var statisticsService: StatisticService?
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
@@ -22,10 +23,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         questionFactory = QuestionFactory(delegate: self)
         alertPresenterProtocol = AlertPresenter(viewController: self)
+        statisticsService = StatisticServiceImplementation()
         
         imageView.layer.cornerRadius = 20
         imageView.layer.masksToBounds = true
-        
         
         questionFactory?.requestNextQuestion()
     }
@@ -67,21 +68,40 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         yesButton.isEnabled = true
         
         if currentQuestionIndex == questionsAmount - 1 {
-            ultimateResult()
+            finalResult()
         } else {
             currentQuestionIndex += 1
             self.questionFactory?.requestNextQuestion()
         }
     }
     
-    private func ultimateResult() {
-        let alertModel = AlertModel(title: "Игра окончена", message: "Ваш результат: \(correctAnswers)/\(questionsAmount)", buttonText: "Сыграть еще раз", completion: { [weak self] in
-            self?.currentQuestionIndex = 0
-            self?.correctAnswers = 0
-            self?.questionFactory?.requestNextQuestion()
-        }
+    private func finalResult() {
+        statisticsService?.store(correct: correctAnswers, total: questionsAmount)
+        
+        let alertModel = AlertModel(
+            title: "Игра окончена",
+            message: makeResultMessage(),
+            buttonText: "Сыграть еще раз",
+            completion: {[weak self] in
+                self?.currentQuestionIndex = 0
+                self?.correctAnswers = 0
+                self?.questionFactory?.requestNextQuestion()
+            }
         )
         alertPresenterProtocol?.showAlert(alertModel: alertModel)
+    }
+    
+    private func makeResultMessage() -> String {
+        
+        guard let statisticsService = statisticsService, let bestGame = statisticsService.bestGame else {
+            return ""
+        }
+        let text = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
+        let playedQuizCauntity = "Количество сыгранных квизов: \(statisticsService.gamesCount)"
+        let accuracy = "Средняя точность: \(String(format: "%.2f", statisticsService.totalAccuracy))%"
+        let bestResult = "Рекорд: \(bestGame.correct)/\(questionsAmount) (\(bestGame.date.dateTimeString))"
+        let result = [ text, playedQuizCauntity, bestResult, accuracy].joined(separator: "\n")
+        return result
     }
     
     private func showAnswerResult(isCorrect: Bool) {
