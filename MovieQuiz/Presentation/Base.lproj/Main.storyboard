@@ -113,10 +113,16 @@
                                     <constraint firstItem="9bL-H7-H2z" firstAttribute="leading" secondItem="4Yg-aj-1RI" secondAttribute="leading" id="hIo-qm-cTk"/>
                                 </constraints>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="paS-CQ-6e4">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                                <color key="color" red="1" green="0.020751403080000001" blue="0.074373929229999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
+                            <constraint firstItem="paS-CQ-6e4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="7Ob-Xu-gjo"/>
+                            <constraint firstItem="paS-CQ-6e4" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="7sE-17-bcU"/>
                             <constraint firstItem="4Yg-aj-1RI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="UlP-az-aIm"/>
                             <constraint firstItem="4Yg-aj-1RI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="aOz-ep-oeq"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4Yg-aj-1RI" secondAttribute="trailing" constant="20" id="kRC-6X-NFY"/>
@@ -124,6 +130,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="paS-CQ-6e4" id="VZ1-Px-ONc"/>
                         <outlet property="counterLabel" destination="pwc-h0-5rG" id="r3Z-Bo-Aqi"/>
                         <outlet property="imageView" destination="5Xz-Bw-MMD" id="q2z-Mm-EB7"/>
                         <outlet property="noButton" destination="C5m-5F-h7p" id="vZh-Vx-d1Y"/>
