@@ -1,5 +1,5 @@
 //
-//  QuizResultsViewModel.swift
+//  QuizQuestion.swift
 //  MovieQuiz
 //
 //  Created by Александр Гегешидзе on 22.09.2023.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct QuizeResultsViewModel {
-    let title: String
+struct QuizQuestion {
+    let image: Data
     let text: String
-    let buttonText: String
+    let correctAnswer: Bool
 }
