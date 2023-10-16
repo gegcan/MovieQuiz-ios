@@ -28,6 +28,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         imageView.layer.cornerRadius = 20
         imageView.layer.masksToBounds = true
+        activityIndicator.hidesWhenStopped = true
         
         showLoadingIndicator()
         questionFactory?.requestNextQuestion()
@@ -124,12 +125,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // запускаю активити индикатор
     private func showLoadingIndicator() {
-        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
         activityIndicator.startAnimating() // включаем анимацию
     }
     
     private func hideLoadingIndicator() {
-        activityIndicator.isHidden = true
         activityIndicator.stopAnimating() // выключаем анимацию
     }
     
