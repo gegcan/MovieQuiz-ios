@@ -29,7 +29,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.cornerRadius = 20
         imageView.layer.masksToBounds = true
         
-//        showLoadingIndicator()
+        showLoadingIndicator()
         questionFactory?.requestNextQuestion()
         questionFactory?.loadData()
     }
@@ -73,6 +73,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             currentQuestionIndex += 1
             self.questionFactory?.requestNextQuestion()
         }
+        hideLoadingIndicator()
     }
     
     private func finalResult() {
@@ -113,6 +114,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             correctAnswers += 1
         }
         
+        showLoadingIndicator()
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             self.showNextQuestionOrResults()
@@ -126,6 +129,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func hideLoadingIndicator() {
+        activityIndicator.isHidden = true
         activityIndicator.stopAnimating() // выключаем анимацию
     }
     
