@@ -2,6 +2,8 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
+    var alertPresenter: AlertPresenter?
+    
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var counterLabel: UILabel!
@@ -9,7 +11,6 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var noButton: UIButton!
     
-    var alertPresenter: AlertPresenter?
     private var presenter: MovieQuizPresenter!
     
     // MARK: - Lifecycle
@@ -44,6 +45,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             self.imageView.layer.borderWidth = 0
         }
     }
+    
     func hideLoadingIndicator() {
         activityIndicator.isHidden = true
     }
@@ -51,16 +53,6 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     func showLoadingIndicator() {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-    }
-    
-    @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        presenter.yesButtonClicked()
-        showLoadingIndicator()
-    }
-    
-    @IBAction private func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked()
-        showLoadingIndicator()
     }
     
     func showNetworkError(message: String) {
@@ -72,9 +64,18 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             guard let self = self else { return }
             
             self.presenter.restartGame()
-            self.presenter.correctAnswers = 0
         }
         
         alertPresenter?.showAlert(alertModel: model)
+    }
+    
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
+        presenter.yesButtonClicked()
+        showLoadingIndicator()
+    }
+    
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
+        presenter.noButtonClicked()
+        showLoadingIndicator()
     }
 }

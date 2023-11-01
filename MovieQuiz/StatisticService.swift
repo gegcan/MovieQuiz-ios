@@ -33,7 +33,6 @@ final class StatisticServiceImplentation {
 
 extension StatisticServiceImplentation: StatisticService {
     
-    
     var totalAccuracy: Double {
         Double(correct) / Double(total) * 100
     }
@@ -64,6 +63,7 @@ extension StatisticServiceImplentation: StatisticService {
             
         }
     }
+    
     var total: Int {
         get {
             userDefaults.integer(forKey: Keys.total.rawValue)
@@ -72,6 +72,7 @@ extension StatisticServiceImplentation: StatisticService {
             userDefaults.set(newValue, forKey: Keys.total.rawValue)
         }
     }
+    
     var correct: Int {
         get {
             userDefaults.integer(forKey: Keys.correct.rawValue)

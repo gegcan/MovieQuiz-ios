@@ -8,7 +8,6 @@
 import XCTest
 
 final class MovieQuizUITests: XCTestCase {
-    // swiftlint:disable:next implicitly_unwrapped_optional
     var app: XCUIApplication!
     
     override func setUpWithError() throws {
@@ -17,8 +16,6 @@ final class MovieQuizUITests: XCTestCase {
         app = XCUIApplication()
         app.launch()
         
-        // это специальная настройка для тестов: если один тест не прошёл,
-        // то следующие тесты запускаться не будут; и правда, зачем ждать?
         continueAfterFailure = false
     }
     override func tearDownWithError() throws {
@@ -71,7 +68,7 @@ final class MovieQuizUITests: XCTestCase {
             sleep(2)
         }
 
-        let alert = app.alerts["AlertId"]
+        let alert = app.alerts["BaseAlert"]
         
         XCTAssertTrue(alert.exists)
         XCTAssertTrue(alert.label == "Игра окончена")
@@ -85,7 +82,7 @@ final class MovieQuizUITests: XCTestCase {
             sleep(2)
         }
         
-        let alert = app.alerts["AlertId"]
+        let alert = app.alerts["BaseAlert"]
         alert.buttons.firstMatch.tap()
         
         sleep(2)

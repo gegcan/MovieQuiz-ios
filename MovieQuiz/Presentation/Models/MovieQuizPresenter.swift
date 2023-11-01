@@ -21,14 +21,13 @@ protocol MovieQuizViewControllerProtocol: AnyObject {
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
     
-    var alertPresenter: AlertPresenter?
     private let statisticService: StatisticService!
     private var currentQuestionIndex: Int = 0
-    let questionsAmount: Int = 10
-    var currentQuestion: QuizQuestion?
+    private let questionsAmount: Int = 10
+    private var currentQuestion: QuizQuestion?
     private weak var viewController: MovieQuizViewControllerProtocol?
     private var isButtonEnabled = true
-    var correctAnswers: Int = 0
+    private var correctAnswers: Int = 0
     private var questionFactory: QuestionFactoryProtocol?
     
     init(viewController: MovieQuizViewControllerProtocol) {
@@ -78,7 +77,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
-        questionFactory?.requestNextQuestion()
+        questionFactory?.loadData()
     }
     
     func switchToNextQuestion() {
@@ -153,9 +152,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
         
         let alertModel = AlertModel(
-            title: "Игра Окончена",
+            title: "Игра окончена",
             message: makeResultMessage(),
-            buttonText: "Сыграть еще раз",
+            buttonText: "Сыграть ещё раз",
             completion: { [weak self] in
                 self?.restartGame()
             }
@@ -173,6 +172,4 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             self.showNextQuestionOrResults()
         }
     }
-    
-    
 }
