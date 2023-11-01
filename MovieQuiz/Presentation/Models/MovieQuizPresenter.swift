@@ -16,7 +16,7 @@ protocol MovieQuizViewControllerProtocol: AnyObject {
     func hideLoadingIndicator()
     
     func showNetworkError(message: String)
-    var alertPresenter: AlertPresenter? { get set }
+    func showQuizResultAlert(alertModel: AlertModel)
 }
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
@@ -40,7 +40,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         viewController.showLoadingIndicator()
     }
     
-    func makeResultMessage() -> String {
+    private func makeResultMessage() -> String {
         guard let statisticService = statisticService,
               let bestGame = statisticService.bestGame else {
             assertionFailure("errroor")
@@ -70,17 +70,18 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         viewController?.showNetworkError(message: message)
     }
     
-    func isLastQuestion() -> Bool {
+    private func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
     }
     
     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
+        viewController?.showLoadingIndicator()
         questionFactory?.loadData()
     }
     
-    func switchToNextQuestion() {
+    private func switchToNextQuestion() {
         currentQuestionIndex += 1
     }
     
@@ -91,7 +92,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
         
     }
-    func didAnswer(isCorrectAnswer: Bool) {
+    
+    private func didAnswer(isCorrectAnswer: Bool) {
         if isCorrectAnswer {
             correctAnswers += 1
         }
@@ -115,10 +117,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     func yesButtonClicked() {
         didAnswer(isYes: true)
+        viewController?.showLoadingIndicator()
     }
     
     func noButtonClicked() {
         didAnswer(isYes: false)
+        viewController?.showLoadingIndicator()
     }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -133,14 +137,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
-    func showNextQuestionOrResults() {
-        if self.isLastQuestion() {
+    private func showNextQuestionOrResults() {
+        if isLastQuestion() {
             showFinalResults()
             
         } else {
-            self.switchToNextQuestion()
+            switchToNextQuestion()
             questionFactory?.requestNextQuestion()
         }
+        viewController?.hideLoadingIndicator()
     }
     
     private func showFinalResults() {
@@ -159,10 +164,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                 self?.restartGame()
             }
         )
-        viewController?.alertPresenter?.showAlert(alertModel: alertModel)
+        
+        viewController?.showQuizResultAlert(alertModel: alertModel)
     }
     
-    func showAnswerResult(isCorrect: Bool) {
+    private func showAnswerResult(isCorrect: Bool) {
         didAnswer(isCorrectAnswer: isCorrect)
         
         viewController?.highLightImageBorder(isCorrectAnswer: isCorrect)

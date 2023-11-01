@@ -19,10 +19,8 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         super.viewDidLoad()
         presenter = MovieQuizPresenter(viewController: self)
         imageView.layer.cornerRadius = 20
-        showLoadingIndicator()
-        imageView.layer.cornerRadius = 20
         alertPresenter = AlertPresenter(viewController: self)
-        showLoadingIndicator()
+        activityIndicator.hidesWhenStopped = true
     }
     
     // MARK:  - QuestionFactoryDelegate
@@ -31,7 +29,6 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
-        hideLoadingIndicator()
     }
     
     func highLightImageBorder(isCorrectAnswer: Bool) {
@@ -47,7 +44,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     func hideLoadingIndicator() {
-        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
     }
     
     func showLoadingIndicator() {
@@ -56,7 +53,6 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     func showNetworkError(message: String) {
-        hideLoadingIndicator()
         
         let model = AlertModel(title: "Ошибка",
                                message: message,
@@ -69,13 +65,15 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         alertPresenter?.showAlert(alertModel: model)
     }
     
+    func showQuizResultAlert(alertModel: AlertModel) {
+        alertPresenter?.showAlert(alertModel: alertModel)
+    }
+    
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         presenter.yesButtonClicked()
-        showLoadingIndicator()
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         presenter.noButtonClicked()
-        showLoadingIndicator()
     }
 }

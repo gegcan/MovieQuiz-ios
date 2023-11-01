@@ -29,7 +29,7 @@ extension AlertPresenter: AlertPresenterProtocol {
 
             alert.view.accessibilityIdentifier = alertModel.accessibilityIdentifier
             alert.addAction(action)
-
+            
             viewController?.present(alert, animated: true)
         }
     }
